@@ -23,12 +23,13 @@ app.get('/', function (req, res) {
 app.get('/api/hello', function (req, res) {
   res.json({ greeting: 'hello API' });
 });
-
+app.set('trust proxy', true); 
 app.get('/api/whoami',(req,res) =>{
-  let ipaddress = req.headers['x-forwarded-for'] || req.socket.remoteAddress;
+  let rawIp = req.ip;
+  let ip = rawIp.split(':').pop();
   let language = req.headers['accept-language'];
   let user = req.headers['user-agent'];
-  res.json({ipaddress:ipaddress,language:language,software:user});
+  res.json({ipaddress:ip,language:language,software:user});
 })
 // listen for requests :)
 var listener = app.listen(process.env.PORT || 3000, function () {
